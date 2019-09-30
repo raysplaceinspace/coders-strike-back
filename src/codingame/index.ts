@@ -1,7 +1,7 @@
-/// <reference path="./index.d.ts" />
+import * as angles from '../util/angles';
 import * as agent from '../agent';
-import * as w from '../agent/world.model';
-import * as v from '../util/vector';
+import * as w from '../world';
+import { Vec } from '../util/vector';
 
 /**
  * Auto-generated code below aims at helping you parse
@@ -18,7 +18,7 @@ function readMap(): w.Map {
         const checkpointY = parseInt(inputs[1]);
         checkpoints.push({
             id: i,
-            pos: v.create(checkpointX, checkpointY),
+            pos: new Vec(checkpointX, checkpointY),
         });
     }
     return {
@@ -39,20 +39,20 @@ function readPod(podId: number, teamId: number): w.Pod {
     return {
         id: podId,
         teamId,
-        pos: v.create(x, y),
-        velocity: v.create(vx, vy),
-        angle,
+        pos: new Vec(x, y),
+        velocity: new Vec(vx, vy),
+        angle: angles.degreeToRad(angle),
         nextCheckpointId,
     };
 }
 
 function formatAction(action: w.Action) {
     if (action.type === "thrust") {
-        return `${action.target.x.toFixed(0)} ${action.target.y.toFixed(0)} ${action.thrust.toFixed(0)}`;
+        return `${action.target.x.toFixed(0)} ${action.target.y.toFixed(0)} ${action.thrust.toFixed(0)} ${action.tag}`;
     } else if (action.type === "shield") {
-        return `SHIELD`;
+        return `SHIELD ${action.tag}`;
     } else if (action.type === "boost") {
-        return `BOOST`;
+        return `BOOST ${action.tag}`;
     } else {
         return "NULL";
     }

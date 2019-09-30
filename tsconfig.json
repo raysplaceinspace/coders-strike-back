@@ -65,5 +65,8 @@
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "files": [
+    "src/environment.d.ts"
   ]
 }

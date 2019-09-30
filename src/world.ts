@@ -1,4 +1,11 @@
-import { Vec } from '../util/vector';
+import * as angles from './util/angles';
+import { Vec } from './util/vector';
+
+export const TurnRate = 0.05 * angles.Tau;
+export const Friction = 0.15;
+export const BoostThrust = 650;
+export const MaxThrust = 200;
+export const CheckpointRadius = 600;
 
 export interface Map {
     laps: number;
@@ -29,16 +36,22 @@ export type Action =
     | BoostAction
     | ShieldAction
 
-export interface ThrustAction {
+export interface ActionBase {
+    type: string;
+    tag?: string;
+}
+
+export interface ThrustAction extends ActionBase {
     type: "thrust";
     target: Vec;
     thrust: number;
 }
 
-export interface BoostAction {
+export interface BoostAction extends ActionBase {
     type: "boost";
+    tag?: string;
 }
 
-export interface ShieldAction {
+export interface ShieldAction extends ActionBase {
     type: "shield";
 }

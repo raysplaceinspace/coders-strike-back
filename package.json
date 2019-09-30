@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "webpack --production",
-    "start": "webpack --watch"
+    "start": "webpack --watch",
+    "test": "webpack --config tester.webpack.config.js && node dist/tester.js"
   }
 }

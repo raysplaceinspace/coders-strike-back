@@ -15,3 +15,7 @@ declare function print(object: any): void;
  * @param {*} object the object to print.
  */
 declare function printErr(object: any): void;
+
+declare var console: {
+    log(str: string): void;
+}
