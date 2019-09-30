@@ -3,8 +3,8 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const mode = 'production';
 
-const agentConfig = {
-  entry: './src/agent/index.ts',
+const runnerConfig = {
+  entry: './src/codingame/index.ts',
   mode,
   resolve: {
     extensions: [".ts"],
@@ -30,4 +30,4 @@ const agentConfig = {
   ],
 };
 
-module.exports = [ agentConfig ];
+module.exports = [ runnerConfig ];

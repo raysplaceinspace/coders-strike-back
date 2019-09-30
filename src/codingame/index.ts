@@ -1,4 +1,4 @@
-/// <reference path="./codingame.d.ts" />
+/// <reference path="./index.d.ts" />
 
 /**
  * Auto-generated code below aims at helping you parse
