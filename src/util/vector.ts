@@ -37,6 +37,12 @@ export class Vec {
         return this;
     }
 
+    sub(vec: Vec) {
+        this.x -= vec.x;
+        this.y -= vec.y;
+        return this;
+    }
+
     mul(multiplier: number) {
         this.x *= multiplier;
         this.y *= multiplier;
