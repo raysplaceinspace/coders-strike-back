@@ -13,12 +13,13 @@ export function choose(world: w.World, podId: number): w.Action {
     const targetDiff = Vec.diff(checkpoint.pos, nextPos);
     const idealVelocity = targetDiff;
     const idealThrust = idealVelocity.clone().sub(pod.velocity);
+    const nextAngle = angles.turnTowards(pod.angle, idealThrust.angle(), w.TurnRate);
 
-    const headingSpeed = pod.velocity.dot(Vec.fromAngle(pod.angle));
+    const headingSpeed = pod.velocity.dot(Vec.fromAngle(nextAngle));
 
     // if we travel the turn rate proportion of the circumference, then we turn out at the same rate we turn in and don't gain any ground
     const tangentialSpeedLimit = (w.TurnRate / angles.Tau) * (angles.Tau * targetDiff.length());
-    const targetAngleError = Math.abs(angles.angleDelta(pod.angle, targetDiff.angle()));
+    const targetAngleError = Math.abs(angles.angleDelta(nextAngle, targetDiff.angle()));
     const headingOrbitalSpeed = tangentialSpeedLimit / (1e-6 + Math.sin(targetAngleError)); // this speed along the thrust heading and we just orbit
     const headingSpeedLimit = Math.cos(targetAngleError) * headingOrbitalSpeed; // want to travel less than orbital speed so we gain more ground inward
 
