@@ -17,26 +17,26 @@ export function choose(world: w.World, podId: number): w.Action {
 
     const headingSpeed = pod.velocity.dot(Vec.fromAngle(nextAngle));
 
-    // if we travel the turn rate proportion of the circumference, then we turn out at the same rate we turn in and don't gain any ground
-    const tangentialSpeedLimit = (w.TurnRate / angles.Tau) * (angles.Tau * targetDiff.length());
-    const targetAngleError = Math.abs(angles.angleDelta(nextAngle, targetDiff.angle()));
-    const headingOrbitalSpeed = tangentialSpeedLimit / (1e-6 + Math.sin(targetAngleError)); // this speed along the thrust heading and we just orbit
-    const headingSpeedLimit = Math.cos(targetAngleError) * headingOrbitalSpeed; // want to travel less than orbital speed so we gain more ground inward
+    const headingSpeedLimit = calculateHeadingSpeedLimit(targetDiff, nextAngle);
 
     const thrust = Math.min(
         w.MaxThrust,
         idealThrust.length(),
         Math.max(0, headingSpeedLimit - headingSpeed),
     );
-    
-    log.info(`pod ${pod.angle.toFixed(2)}`);
-    log.info(`target ${targetDiff.angle().toFixed(2)}`);
-    log.info(`error ${targetAngleError.toFixed(2)}`);
-    log.info(`limit ${headingSpeedLimit.toFixed(0)}`);
 
     return {
         type: "thrust",
         target: pod.pos.clone().add(idealThrust),
         thrust,
     };
+}
+
+function calculateHeadingSpeedLimit(targetDiff: Vec, nextAngle: number) {
+    // if we travel the turn rate proportion of the circumference, then we turn out at the same rate we turn in and don't gain any ground
+    const tangentialSpeedLimit = (w.TurnRate / angles.Tau) * (angles.Tau * targetDiff.length());
+    const targetAngleError = Math.abs(angles.angleDelta(nextAngle, targetDiff.angle()));
+    const headingOrbitalSpeed = tangentialSpeedLimit / (1e-6 + Math.sin(targetAngleError)); // this speed along the thrust heading and we just orbit
+    const headingSpeedLimit = 0.33 * Math.cos(targetAngleError) * headingOrbitalSpeed; // want to travel less than orbital speed so we gain more ground inward
+    return headingSpeedLimit;
 }
