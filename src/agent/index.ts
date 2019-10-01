@@ -37,7 +37,8 @@ export function choose(world: w.World, podId: number): w.Action {
 }
 
 function calculateNextCheckpointLimit(targetDiff: Vec, nextDiff: Vec, nextAngle: number) {
-    const nextBrakeSpeed = Math.sqrt(w.MaxThrust * targetDiff.length());
+    // We can cancel out momentum with our thrust. Equalise the rate ticks to reach the checkpoint vs the ticks to cancel out momentum, and we get this equation.
+    const nextBrakeSpeed = Math.sqrt(w.MaxThrust * targetDiff.length()); 
     const nextTurnAngle = Math.abs(angles.angleDelta(nextAngle, nextDiff.angle()));
     const nextCosineAgreement = Math.cos(nextTurnAngle);
     const nextSpeedLimit = nextBrakeSpeed / Math.max(1e-6, -nextCosineAgreement);
