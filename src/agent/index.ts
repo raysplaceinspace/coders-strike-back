@@ -19,10 +19,14 @@ export function choose(world: w.World, podId: number): w.Action {
 
     const headingSpeedLimit = calculateHeadingSpeedLimit(targetDiff, nextAngle);
 
+    const nextDiff = Vec.diff(nextCheckpoint.pos, checkpoint.pos);
+    const nextSpeedLimit = calculateNextCheckpointLimit(targetDiff, nextDiff, nextAngle);
+
     const thrust = Math.min(
         w.MaxThrust,
         idealThrust.length(),
         Math.max(0, headingSpeedLimit - headingSpeed),
+        Math.max(0, nextSpeedLimit - headingSpeed),
     );
 
     return {
@@ -30,6 +34,14 @@ export function choose(world: w.World, podId: number): w.Action {
         target: pod.pos.clone().add(idealThrust),
         thrust,
     };
+}
+
+function calculateNextCheckpointLimit(targetDiff: Vec, nextDiff: Vec, nextAngle: number) {
+    const nextBrakeSpeed = Math.sqrt(w.MaxThrust * targetDiff.length());
+    const nextTurnAngle = Math.abs(angles.angleDelta(nextAngle, nextDiff.angle()));
+    const nextCosineAgreement = Math.cos(nextTurnAngle);
+    const nextSpeedLimit = nextBrakeSpeed / Math.max(1e-6, -nextCosineAgreement);
+    return nextSpeedLimit;
 }
 
 function calculateHeadingSpeedLimit(targetDiff: Vec, nextAngle: number) {
