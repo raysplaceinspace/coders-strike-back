@@ -37,6 +37,6 @@ function calculateHeadingSpeedLimit(targetDiff: Vec, nextAngle: number) {
     const tangentialSpeedLimit = (w.TurnRate / angles.Tau) * (angles.Tau * targetDiff.length());
     const targetAngleError = Math.abs(angles.angleDelta(nextAngle, targetDiff.angle()));
     const headingOrbitalSpeed = tangentialSpeedLimit / (1e-6 + Math.sin(targetAngleError)); // this speed along the thrust heading and we just orbit
-    const headingSpeedLimit = 0.33 * Math.cos(targetAngleError) * headingOrbitalSpeed; // want to travel less than orbital speed so we gain more ground inward
+    const headingSpeedLimit = 0.25 * Math.cos(targetAngleError) * headingOrbitalSpeed; // want to travel less than orbital speed so we gain more ground inward
     return headingSpeedLimit;
 }
