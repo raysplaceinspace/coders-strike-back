@@ -46,13 +46,21 @@ function readPod(podId: number, teamId: number): w.Pod {
     };
 }
 
-function formatAction(action: w.Action) {
+function formatAction(action: w.Action): string {
+    let result = formatActionParams(action);
+    if (action.tag) {
+        result += ` ${action.tag}`;
+    }
+    return result;
+}
+
+function formatActionParams(action: w.Action): string {
     if (action.type === "thrust") {
-        return `${action.target.x.toFixed(0)} ${action.target.y.toFixed(0)} ${action.thrust.toFixed(0)} ${action.tag}`;
+        return `${action.target.x.toFixed(0)} ${action.target.y.toFixed(0)} ${action.thrust.toFixed(0)}`;
     } else if (action.type === "shield") {
-        return `SHIELD ${action.tag}`;
+        return `SHIELD`;
     } else if (action.type === "boost") {
-        return `BOOST ${action.tag}`;
+        return `BOOST`;
     } else {
         return "NULL";
     }
